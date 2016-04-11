@@ -64,26 +64,67 @@
                                         </tr>
                                     @endforeach
                                 </table>
-                                @if(!empty($currentUser))
-                                    @if($currentUser->administrator)
-                                        @if(!$member->administrator)
-                                        <a href={{url("members/setAdministrator/".$member->id)}} class="btn btn-primary">
-                                            <i class="fa fa-btn fa-user"></i>Grant administrator priviledges
-                                        </a>
-                                        @endif
-                                        @if(!$member->old)
-                                        <a href={{url("members/setOld/".$member->id)}} class="btn btn-primary pull-right">
-                                            <i class="fa fa-btn fa-gear"></i>Set old
-                                        </a>
-                                        @else
-                                        <a href={{url("members/unOld/".$member->id)}} class="btn btn-primary pull-right">
-                                            <i class="fa fa-btn fa-gear"></i>Unset old
-                                        </a>
-                                        @endif
-                                    @endif
-                                @endif
                             </div>
                             @endif
+                            @if(count($projectParticipations) > 0)
+                            <div>
+                                <h3>Project Participations</h3>
+                                <table class="table">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Register date</th>
+                                        @if(!empty($currentUser))
+                                            <th>Edit</th>
+                                        @endif
+                                    </tr>
+                                    @foreach ($projectParticipations as $project)
+                                        <tr onclick="navigate('{{url("projects/".$project->id)}}')" style="cursor : pointer">
+                                            <td text-align="center" style="padding : 3px"><img src={{url($project->photo)}} height="40px" /></td>
+                                            <td><p>{{ $project->name }}</p></td>
+                                            <td><p>{{ $project->description }}</p></td>
+                                            <td><p>{{ $project->created_at }}</p></td>
+                                            @if(!empty($currentUser))
+                                                @if($project->creatorId == $currentUser->id || $currentUser->administrator )
+                                                    <td>
+                                                        <a href={{url("projects/edit/".$project->id)}} class="btn btn-primary" >
+                                                        <i class="fa fa-btn fa-gear"></i>Edit
+                                                        </a>
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        <a href="" class="btn btn-primary" disabled=true>
+                                                            <i class="fa fa-btn fa-gear"></i>Not Available
+                                                        </a>
+                                                    </td>
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                            @endif
+                            <div>
+                            @if(!empty($currentUser))
+                                @if($currentUser->administrator)
+                                    @if(!$member->administrator)
+                                        <a href={{url("members/setAdministrator/".$member->id)}} class="btn btn-primary">
+                                        <i class="fa fa-btn fa-user"></i>Grant administrator priviledges
+                                        </a>
+                                    @endif
+                                    @if(!$member->old)
+                                        <a href={{url("members/setOld/".$member->id)}} class="btn btn-primary pull-right">
+                                        <i class="fa fa-btn fa-gear"></i>Set old
+                                        </a>
+                                    @else
+                                        <a href={{url("members/unOld/".$member->id)}} class="btn btn-primary pull-right">
+                                        <i class="fa fa-btn fa-gear"></i>Unset old
+                                        </a>
+                                    @endif
+                                @endif
+                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>

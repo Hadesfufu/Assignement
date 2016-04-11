@@ -40,9 +40,10 @@ class MembersController extends Controller
         $member = User::where('id', $id)->get()[0];
         $projects = Project::where('creatorId', $id)->get();
         $user = User::find(Auth::user()->id)->get();
+        $projectParticipations = DB::table('projects')->join('projects_members', 'projects.id', '=', 'projects_members.ProjectId')->select('projects.*')->where('projects_members.UserId', $id)->get();
         if(!empty($user))
             $user = $user[0];
-        return view('membersDetails', ['member' => $member, 'projects' => $projects, 'currentUser' => $user]);
+        return view('membersDetails', ['member' => $member, 'projects' => $projects, 'currentUser' => $user, 'projectParticipations' => $projectParticipations]);
     }
 
     public function oldDisplay(){
@@ -61,7 +62,6 @@ class MembersController extends Controller
             $member->administrator = true;
             $member->save();
         }
-        $this->details($id);
         return Redirect::to('/members/'.$member->id);
     }
 
@@ -75,7 +75,6 @@ class MembersController extends Controller
             $member->old = true;
             $member->save();
         }
-        $this->details($id);
         return Redirect::to('/members/'.$member->id);
     }
 
@@ -89,7 +88,6 @@ class MembersController extends Controller
             $member->old = false;
             $member->save();
         }
-        $this->details($id);
         return Redirect::to('/members/'.$member->id);
     }
 }

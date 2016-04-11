@@ -26,8 +26,6 @@
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
-    Route::get('/home', 'HomeController@index');
-
     Route::get('/projects', 'ProjectsController@index');
 
     Route::get('/projects/add',
@@ -36,6 +34,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/projects/add',
         ['as' => 'projects_add_apply', 'uses' => 'ProjectsController@add']);
 
+    Route::get('/projects/unOld/{id}', 'ProjectsController@unOld');
+
+    Route::get('/projects/setOld/{id}', 'ProjectsController@setOld');
+
     Route::get('/projects/{id}', 'ProjectsController@details');
 
     Route::get('/projects/edit/{id}',
@@ -43,6 +45,10 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::post('/projects/edit/{id}',
         ['as' => 'projects_edit_apply', 'uses' => 'ProjectsController@edit']);
+
+    Route::get('/projects/addMember/{id}', 'ProjectsController@addMember');
+
+    Route::get('/projects/removeMember/{id}', 'ProjectsController@removeMember');
 
     Route::get('/members', 'MembersController@index');
 
@@ -62,7 +68,7 @@ Route::group(['middleware' => 'web'], function () {
         ['as' => 'settings', 'uses' => 'SettingsController@index']);
 
     Route::post('settings',
-        ['as' => 'settings_apply', 'uses' => 'SettingsController@update']);
+        ['as' => 'settings_apply', 'uses' => 'SettingsCont1roller@update']);
 
     Route::get('old/members', 'MembersController@oldDisplay');
 
