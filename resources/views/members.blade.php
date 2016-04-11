@@ -22,6 +22,9 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Register date</th>
+                                @if($isAdmin)
+                                    <th>Edit</th>
+                                @endif
                             </tr>
                             @foreach ($members as $member)
                             <tr onclick="navigate('{{url("members/".$member->id)}}')" style="cursor:pointer">
@@ -29,6 +32,13 @@
                                 <td><p>{{ $member->name }}</p></td>
                                 <td><p>{{ $member->email }}</p></td>
                                 <td><p>{{ $member->created_at }}</p></td>
+                                @if($isAdmin)
+                                <td>
+                                    <a href={{url("settings/".$member->id)}} class="btn btn-primary" >
+                                        <i class="fa fa-btn fa-gear"></i>Edit
+                                    </a>
+                                </td>
+                                @endif
                             </tr>
                             @endforeach
                         </table>

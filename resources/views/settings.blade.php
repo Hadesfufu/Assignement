@@ -7,7 +7,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Settings</div>
                     <div class="panel-body">
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('settings') }}" enctype="multipart/form-data">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('settings/'.$user->id) }}" enctype="multipart/form-data">
                             {!! csrf_field() !!}
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -76,7 +76,7 @@
 
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Profile image</label>
-                                <img src={{ $user->photo }} height="34px" />
+                                <img src={{ url($user->photo) }} height="34px" />
 
                                 <div class="col-md-6">
                                     <input type="file" class="form-control" name="image">

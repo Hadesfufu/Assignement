@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
@@ -26,15 +27,31 @@ class SettingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $user = Auth::user();
+        if(!User::find($id)->exists() || !Auth::check())
+            return Redirect::to('/members');
+        $currentUser = Auth::user();
+        $user = User::where('id', $id)->get()[0];
+        if($currentUser->id != $user->id && !$currentUser->administrator)
+            return Redirect::to('/members');
 
         return view('settings', ['user' => $user]);
     }
 
-    public function update(Requests\SettingsFormRequest $request){
-        $user = User::find(Auth::user()->id);
+    public function mySettings(){
+        return Redirect::to('/settings/'.Auth::user()->id);
+    }
+
+    public function update($id, Requests\SettingsFormRequest $request){
+        if(!User::find($id)->exists() || !Auth::check())
+            return Redirect::to('/members');
+        $currentUser = Auth::user();
+        $user = User::where('id', $id)->get()[0];
+        if($currentUser->id != $user->id && !$currentUser->administrator)
+            return Redirect::to('/members');
+
+        $user = User::where('id', $id)->get()[0];
         $user->name = $request->name;
         $user->email = $request->email;
         if(isset($request->password))
@@ -59,7 +76,6 @@ class SettingsController extends Controller
         }
         $user->save();
         Auth::setUser($user);
-        return \Redirect::route('settings')
-            ->with('message', 'Your data have been updated successfully!');
+        return \Redirect::back()    ->with('message', 'Your data have been updated successfully!');
     }
 }

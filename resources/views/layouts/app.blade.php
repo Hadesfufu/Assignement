@@ -64,6 +64,9 @@
                         </ul>
                     </li>
                 </ul>
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url('/contact') }}">Contact</a></li>
+                </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -79,7 +82,7 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                                <li><a href="{{ url('/settings') }}"><i class="fa fa-btn fa-gear"></i>Settings</a></li>
+                                <li><a href="{{ url('/settings/'.\Illuminate\Support\Facades\Auth::user()->id) }}"><i class="fa fa-btn fa-gear"></i>Settings</a></li>
                             </ul>
                         </li>
                     @endif

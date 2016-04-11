@@ -64,13 +64,17 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/', function () { return view('welcome');  });
 
-    Route::get('/settings',
+    Route::get('settings/', 'SettingsController@mySettings');
+    Route::get('settings/{id}',
         ['as' => 'settings', 'uses' => 'SettingsController@index']);
 
-    Route::post('settings',
-        ['as' => 'settings_apply', 'uses' => 'SettingsCont1roller@update']);
+    Route::post('settings/{id}',
+        ['as' => 'settings_apply', 'uses' => 'SettingsController@update']);
 
     Route::get('old/members', 'MembersController@oldDisplay');
 
     Route::get('old/projects', 'ProjectsController@oldDisplay');
+
+    Route::get('contact', function(){return view('contact'); });
+
 });

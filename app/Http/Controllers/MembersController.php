@@ -29,8 +29,10 @@ class MembersController extends Controller
     public function index()
     {
         $members = DB::table('users')->where('old',false)->get();
-
-        return view('members', ['members' => $members]);
+        $isAdmin = false;
+        if(Auth::check())
+            $isAdmin = Auth::user()->administrator;
+        return view('members', ['members' => $members, 'isAdmin' => $isAdmin]);
     }
 
     public function details($id){
