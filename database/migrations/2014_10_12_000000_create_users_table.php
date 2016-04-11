@@ -19,12 +19,20 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->boolean('old')->default(false);
             $table->boolean('isStudent')->default(false);
+            $table->boolean('administrator')->default(false);
             $table->integer('group_id');
             $table->integer('supervisor_id');
             $table->string('photo')->default("img/default.png");
             $table->rememberToken();
             $table->timestamps();
         });
+
+        $admin = new \App\User();
+        $admin->name = "admin";
+        $admin->email = "yohan.masson@neuf.fr";
+        $admin->administrator = true;
+        $admin->password = bcrypt("admin");
+        $admin->save();
     }
 
     /**

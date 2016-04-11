@@ -26,21 +26,30 @@
                             <p>{{$project->description}}</p>
                         </div>
                     </div>
+                    <div>
                     @if(!empty($currentUser))
-                        @if($user->id == $currentUser->id)
-                            <div>
-                                <a href={{url("projects/edit/".$project->id)}} class="btn btn-primary">
-                                    <i class="fa fa-btn fa-gear"></i>Edit
-                                </a>
-                            </div>
+                        @if($user->id == $currentUser->id || $currentUser->administrator)
+                            <a href={{url("projects/edit/".$project->id)}} class="btn btn-primary">
+                                <i class="fa fa-btn fa-gear"></i>Edit
+                            </a>
                         @else
-                            <div>
-                                <a href="" class="btn btn-primary" disabled=true>
-                                    <i class="fa fa-btn fa-gear"></i>Not Available
+                            <a href="" class="btn btn-primary" disabled=true>
+                                <i class="fa fa-btn fa-gear"></i>Not Available
+                            </a>
+                        @endif
+                        @if($currentUser->administrator)
+                            @if(!$project->old)
+                                <a href={{url("projects/setOld/".$project->id)}} class="btn btn-primary pull-right">
+                                    <i class="fa fa-btn fa-gear"></i>Set old
                                 </a>
-                            </div>
+                            @else
+                                <a href={{url("projects/unOld/".$project->id)}} class="btn btn-primary pull-right">
+                                    <i class="fa fa-btn fa-gear"></i>Unset old
+                                </a>
+                            @endif
                         @endif
                     @endif
+                    </div>
                 </div>
             </div>
         </div>

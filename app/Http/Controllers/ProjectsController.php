@@ -76,9 +76,15 @@ class ProjectsController extends Controller
     }
 
     public function editIndex($id){
-        $project = Project::where('id', $id)->get()[0];
-
-        return view('projectsEditForm', ['project' => $project]);
+        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+            return Redirect::to('/');
+        }
+        elseif(Auth::user()->administrator || Project::where('id', $id)->get()[0]->creatorId == Auth::user()->id) {
+            $project = Project::where('id', $id)->get()[0];
+            return view('projectsEditForm', ['project' => $project]);
+        }
+        else
+            return Redirect::to('/');
     }
 
     public function edit($id, Requests\ProjectCreationRequest $request){

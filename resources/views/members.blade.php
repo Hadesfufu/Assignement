@@ -25,7 +25,7 @@
                             </tr>
                             @foreach ($members as $member)
                             <tr onclick="navigate('{{url("members/".$member->id)}}')" style="cursor:pointer">
-                                <td text-align="center" style="padding : 3px"><img src={{$member->photo}} height="40px" /></td>
+                                <td text-align="center" style="padding : 3px"><img src={{url($member->photo)}} height="40px" /></td>
                                 <td><p>{{ $member->name }}</p></td>
                                 <td><p>{{ $member->email }}</p></td>
                                 <td><p>{{ $member->created_at }}</p></td>

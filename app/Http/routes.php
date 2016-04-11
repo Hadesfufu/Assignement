@@ -30,29 +30,35 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/projects', 'ProjectsController@index');
 
-    Route::get('/projects/{id}', 'ProjectsController@details');
-
-    Route::get('projects/add',
+    Route::get('/projects/add',
         ['as' => 'projects_add', 'uses' => 'ProjectsController@addIndex']);
 
-    Route::post('projects/add',
+    Route::post('/projects/add',
         ['as' => 'projects_add_apply', 'uses' => 'ProjectsController@add']);
 
-    Route::get('projects/edit/{id}',
+    Route::get('/projects/{id}', 'ProjectsController@details');
+
+    Route::get('/projects/edit/{id}',
         ['as' => 'projects_edit', 'uses' => 'ProjectsController@editIndex']);
 
-    Route::post('projects/edit/{id}',
+    Route::post('/projects/edit/{id}',
         ['as' => 'projects_edit_apply', 'uses' => 'ProjectsController@edit']);
 
     Route::get('/members', 'MembersController@index');
 
     Route::get('/members/{id}', 'MembersController@details');
 
+    Route::get('/members/setAdministrator/{id}', 'MembersController@setAdmin');
+
+    Route::get('/members/setOld/{id}', 'MembersController@setOld');
+
+    Route::get('/members/unOld/{id}', 'MembersController@unOld');
+
     Route::get('/publications', 'PublicationsController@index');
 
     Route::get('/', function () { return view('welcome');  });
 
-    Route::get('settings',
+    Route::get('/settings',
         ['as' => 'settings', 'uses' => 'SettingsController@index']);
 
     Route::post('settings',

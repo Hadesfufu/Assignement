@@ -47,7 +47,7 @@
                                             <td><p>{{ $project->description }}</p></td>
                                             <td><p>{{ $project->created_at }}</p></td>
                                             @if(!empty($currentUser))
-                                                @if($users[$project->id][0]->id == $currentUser->id)
+                                                @if($project->creatorId == $currentUser->id || $currentUser->administrator )
                                                     <td>
                                                         <a href={{url("projects/edit/".$project->id)}} class="btn btn-primary" >
                                                         <i class="fa fa-btn fa-gear"></i>Edit
@@ -64,6 +64,24 @@
                                         </tr>
                                     @endforeach
                                 </table>
+                                @if(!empty($currentUser))
+                                    @if($currentUser->administrator)
+                                        @if(!$member->administrator)
+                                        <a href={{url("members/setAdministrator/".$member->id)}} class="btn btn-primary">
+                                            <i class="fa fa-btn fa-user"></i>Grant administrator priviledges
+                                        </a>
+                                        @endif
+                                        @if(!$member->old)
+                                        <a href={{url("members/setOld/".$member->id)}} class="btn btn-primary pull-right">
+                                            <i class="fa fa-btn fa-gear"></i>Set old
+                                        </a>
+                                        @else
+                                        <a href={{url("members/unOld/".$member->id)}} class="btn btn-primary pull-right">
+                                            <i class="fa fa-btn fa-gear"></i>Unset old
+                                        </a>
+                                        @endif
+                                    @endif
+                                @endif
                             </div>
                             @endif
                         </div>

@@ -32,7 +32,7 @@
                                     <td><p>{{ $project->description }}</p></td>
                                     <td><p>{{ $project->created_at }}</p></td>
                                     @if(!empty($currentUser))
-                                        @if($users[$project->id][0]->id == $currentUser->id)
+                                        @if($users[$project->id][0]->id == $currentUser->id || $currentUser->administrator)
                                             <td>
                                                 <a href={{url("projects/edit/".$project->id)}} class="btn btn-primary" >
                                                 <i class="fa fa-btn fa-gear"></i>Edit
