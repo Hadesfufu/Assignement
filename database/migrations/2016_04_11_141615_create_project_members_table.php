@@ -15,6 +15,7 @@ class CreateProjectMembersTable extends Migration
         Schema::create('projects_members', function (Blueprint $table) {
             $table->integer('UserId')->references('id')->on('users');
             $table->integer('ProjectId')->references('id')->on('projects');
+            $table->primary(['UserId', 'ProjectId']);
             $table->timestamps();
         });
     }

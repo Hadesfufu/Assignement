@@ -46,7 +46,7 @@ class ProjectsController extends Controller
 
     public function add(Requests\ProjectCreationRequest $request){
 
-        $user = User::find(Auth::user()->id);
+        $user = User::where('id',Auth::user()->id)->get()[0];
         $project = new Project;
         $project->name = $request->name;
         $project->creatorId = $user->id;
@@ -76,19 +76,19 @@ class ProjectsController extends Controller
     }
 
     public function editIndex($id){
-        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
-            return Redirect::to('/');
+        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+            return Redirect::to('projects');
         }
         elseif(Auth::user()->administrator || Project::where('id', $id)->get()[0]->creatorId == Auth::user()->id) {
             $project = Project::where('id', $id)->get()[0];
             return view('projectsEditForm', ['project' => $project]);
         }
         else
-            return Redirect::to('/');
+            return Redirect::to('projects');
     }
 
     public function edit($id, Requests\ProjectCreationRequest $request){
-        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
         }
         $project = Project::where('id', $id)->get()[0];
@@ -132,7 +132,7 @@ class ProjectsController extends Controller
         $members = DB::table('users')->join('projects_members', 'users.id', '=', 'projects_members.UserId')->select('users.*')->where('projects_members.ProjectId', $project->id)->get();
         $isIntheProject = NULL;
         if(Auth::check()) {
-            $currentUser = User::find(Auth::user()->id);
+            $currentUser = User::where('id',Auth::user()->id);
             $isIntheProject = false;
             foreach ($members as $member) {
                 if ($currentUser->id == $member->id)
@@ -154,10 +154,10 @@ class ProjectsController extends Controller
     }
 
     public function setOld($id){
-        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
         }
-        $user = User::find(Auth::user()->id)->get()[0];
+        $user = User::where('id',Auth::user()->id)->get()[0];
         if($user->administrator){
             $project = Project::where('id', $id)->get()[0];
             $project->old = true;
@@ -167,10 +167,10 @@ class ProjectsController extends Controller
     }
 
     public function unOld($id){
-        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
         }
-        $user = User::find(Auth::user()->id)->get()[0];
+        $user = User::where('id',Auth::user()->id)->get()[0];
         if($user->administrator){
             $project = Project::where('id', $id)->get()[0];
             $project->old = false;
@@ -180,11 +180,11 @@ class ProjectsController extends Controller
     }
 
     public function addMember($id){
-        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
         }
-        $project = Project::find($id)->get()[0];
-        $user = User::find(Auth::user()->id)->get()[0];
+        $project = Project::where('id',$id)->get()[0];
+        $user = User::where('id',Auth::user()->id)->get()[0];
         DB::table('projects_members')->insert([
             'UserId' => $user->id,
             'ProjectId' => $project->id
@@ -193,11 +193,11 @@ class ProjectsController extends Controller
     }
 
     public function removeMember($id){
-        if(!Project::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
         }
-        $project = Project::find($id)->get()[0];
-        $user = User::find(Auth::user()->id)->get()[0];
+        $project = Project::where('id',$id)->get()[0];
+        $user = User::where('id',Auth::user()->id)->get()[0];
         DB::table('projects_members')->where([
             'UserId' => $user->id,
             'ProjectId' => $project->id

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Request;
 
-class ProjectCreationRequest extends Request
+class PublicationEditionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,8 @@ class ProjectCreationRequest extends Request
         return [
             'name' => 'required|alpha_num|min:3|max:32',
             'description' => '',
-            'image' => ''
+            'pdf' => '',
+            'txt' => ''
         ];
     }
 }

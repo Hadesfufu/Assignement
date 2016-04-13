@@ -14,8 +14,11 @@ class CreatePublicationTable extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->string('content');
             $table->string('pdf');
+            $table->string('txt');
+            $table->boolean('old')->default(false);
             $table->timestamps();
         });
     }

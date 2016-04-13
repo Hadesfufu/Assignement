@@ -47,27 +47,27 @@ class SettingsController extends Controller
         if(!User::find($id)->exists() || !Auth::check())
             return Redirect::to('/members');
         $currentUser = Auth::user();
-        $user = User::where('id', $id)->get()[0];
-        if($currentUser->id != $user->id && !$currentUser->administrator)
-            return Redirect::to('/members');
+                $user = User::where('id', $id)->get()[0];
+                if($currentUser->id != $user->id && !$currentUser->administrator)
+                    return Redirect::to('/members');
 
-        $user = User::where('id', $id)->get()[0];
-        $user->name = $request->name;
-        $user->email = $request->email;
-        if(isset($request->password))
-            $user->password = bcrypt($request->password);
+                $user = User::where('id', $id)->get()[0];
+                $user->name = $request->name;
+                $user->email = $request->email;
+                if(isset($request->password))
+                    $user->password = bcrypt($request->password);
 
-        if($request->hasFile('image')) {
-            $image = $request->file('image');
-            if($image->isValid()){
-                $extension = $image->getClientOriginalExtension(); // getting image extension
-                $fileName = rand(11111,99999).'.'.$extension; // renameing image
-                $image->move("img", $fileName);
-                $user->photo = "img/".$fileName;
-            }
-            else {
-                // sending back with error message.
-                Session::flash('fileError', 'uploaded file is not valid');
+                if($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    if($image->isValid()){
+                        $extension = $image->getClientOriginalExtension(); // getting image extension
+                        $fileName = rand(11111,99999).'.'.$extension; // renameing image
+                        $image->move("img", $fileName);
+                        $user->photo = "img/".$fileName;
+                    }
+                    else {
+                        // sending back with error message.
+                        Session::flash('fileError', 'uploaded file is not valid');
                 return Redirect::to('settings');
             }
         }

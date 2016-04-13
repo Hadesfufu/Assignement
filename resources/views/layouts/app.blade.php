@@ -61,6 +61,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ url('/old/members') }}">Members</a></li>
                             <li><a href="{{ url('/old/projects') }}">Projects</a></li>
+                            <li><a href="{{ url('/old/publications') }}">Publications</a></li>
                         </ul>
                     </li>
                 </ul>
