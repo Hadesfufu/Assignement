@@ -19,6 +19,13 @@
                             <img src={{url($member->photo)}} style="width: 100%" />
                         </div>
                         <div class="col-md-8">
+                            @if($member->isStudent)
+                                <div>
+                                    <h3>This Member is a Student</h3>
+                                    <h4>His supervisor is :</h4>
+                                    <a href="{{url("members/".$supervisor->id)}}">{{$supervisor->name}}</a>
+                                </div>
+                            @endif
                             <div>
                                 <h3>Email</h3>
                                 <p>{{$member->email}}</p>
@@ -100,6 +107,29 @@
                                                     </td>
                                                 @endif
                                             @endif
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                            @endif
+                            @if(count($students) > 0)
+                                <div>
+                                    <h3>Students Supervisored</h3>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Register date</th>
+                                        </tr>
+                                        @foreach ($students as $student)
+                                            <tr onclick="navigate('{{url("members/".$student->id)}}')"
+                                                style="cursor:pointer">
+                                                <td text-align="center" style="padding : 3px"><img
+                                                            src={{url($student->photo)}} height="40px"/></td>
+                                                <td><p>{{ $student->name }}</p></td>
+                                                <td><p>{{ $student->email }}</p></td>
+                                                <td><p>{{ $student->created_at }}</p></td>
                                         </tr>
                                     @endforeach
                                 </table>

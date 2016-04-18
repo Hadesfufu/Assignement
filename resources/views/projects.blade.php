@@ -51,7 +51,7 @@
                         </table>
                     </div>
                     <div class="panel-footer">
-                        @unless (!Auth::check())
+                        @unless (!Auth::check() || $currentUser->isStudent)
                             <a href={{url("projects/add")}} class="btn btn-primary" >
                                 <i class="fa fa-btn fa-plus"></i>Add Project
                             </a>

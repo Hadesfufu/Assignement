@@ -12,6 +12,11 @@ use App\Http\Requests;
 use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
 use Illuminate\Http\Request;
 
+/**
+ * Class ProjectsController
+ * @package App\Http\Controllers
+ */
+
 class ProjectsController extends Controller
 {
     /**
@@ -24,7 +29,7 @@ class ProjectsController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the tables of all projects.
      *
      * @return \Illuminate\Http\Response
      */
@@ -39,11 +44,20 @@ class ProjectsController extends Controller
         return view('projects', ['projects' => $projects, 'users' => $users, 'currentUser' => $user]);
     }
 
+    /**
+     * Show the add project form
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addIndex()
     {
         return view('projectsAddForm');
     }
 
+    /**
+     * Manage the request of the add form
+     * @param Requests\ProjectCreationRequest $request
+     * @return mixed
+     */
     public function add(Requests\ProjectCreationRequest $request){
 
         $user = User::where('id',Auth::user()->id)->get()[0];
@@ -75,6 +89,11 @@ class ProjectsController extends Controller
             ->with('message', 'The project has been successfully created!');
     }
 
+    /**
+     * Show the edit project form
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editIndex($id){
         if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('projects');
@@ -87,6 +106,12 @@ class ProjectsController extends Controller
             return Redirect::to('projects');
     }
 
+    /**
+     * Manage the edit project form request
+     * @param $id
+     * @param Requests\ProjectCreationRequest $request
+     * @return mixed
+     */
     public function edit($id, Requests\ProjectCreationRequest $request){
         if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
@@ -122,6 +147,11 @@ class ProjectsController extends Controller
             ->with('message', 'The project has been successfully updated!');
     }
 
+    /**
+     * Show details of a Project
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function details($id){
         if(!Project::where('id', $id)->exists()) {
             return Redirect::to('/');
@@ -142,7 +172,10 @@ class ProjectsController extends Controller
         return view('projectsDetails', ['project' => $project, 'user' => $user, 'currentUser' => $currentUser, 'members' => $members, "currentIsInTheProject" => $isIntheProject]);
     }
 
-
+    /**
+     * Show a table of all old projects
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function oldDisplay(){
         $projects = Project::where('old', true)->get();
         $users = array();
@@ -153,6 +186,11 @@ class ProjectsController extends Controller
         return view('projects', ['projects' => $projects, 'users' => $users, 'currentUser' => $user]);
     }
 
+    /**
+     * Declare a project as old
+     * @param $id
+     * @return mixed
+     */
     public function setOld($id){
         if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
@@ -166,6 +204,11 @@ class ProjectsController extends Controller
         return Redirect::to('/projects/'.$project->id);
     }
 
+    /**
+     * Declare a project as not old
+     * @param $id
+     * @return mixed
+     */
     public function unOld($id){
         if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
@@ -179,6 +222,11 @@ class ProjectsController extends Controller
         return Redirect::to('/projects/'.$project->id);
     }
 
+    /**
+     * Add a member to a project
+     * @param $id
+     * @return mixed
+     */
     public function addMember($id){
         if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
@@ -192,6 +240,11 @@ class ProjectsController extends Controller
         return Redirect::to('/projects/'.$project->id);
     }
 
+    /**
+     * Remove a member to a project
+     * @param $id
+     * @return mixed
+     */
     public function removeMember($id){
         if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');

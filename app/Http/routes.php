@@ -22,9 +22,10 @@
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+
+    Route::post('/login', 'Auth\AuthController@postLogin');
 
     Route::get('/projects', 'ProjectsController@index');
 
@@ -97,24 +98,5 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('old/publications', 'PublicationsController@oldDisplay');
 
     Route::get('contact', function(){return view('contact'); });
-
-    Route::get('download/{filename}', function($filename)
-    {
-        // Check if file exists in app/storage/file folder
-        $file_path = url($filename);
-        if (file_exists($file_path))
-        {
-            // Send Download
-            return Response::download($file_path, $filename, [
-                'Content-Length: '. filesize($file_path)
-            ]);
-        }
-        else
-        {
-            // Error
-            exit('Requested file does not exist on our server!');
-        }
-    })
-        ->where('filename', '[A-Za-z0-9\-\_\.]+');
 
 });

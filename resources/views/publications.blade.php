@@ -31,7 +31,7 @@
                                     @endif
                                     <td><p>{{ $publication->name }}</p></td>
                                     <td><p>{{ $publication->created_at }}</p></td>
-                                    @if(!empty($currentUser))
+                                    @if(!empty($currentUser) && !$currentUser->isStudent)
                                         <td>
                                             <a href={{url("publications/edit/".$publication->id)}} class="btn btn-primary" >
                                             <i class="fa fa-btn fa-gear"></i>Edit
@@ -43,7 +43,7 @@
                         </table>
                     </div>
                     <div class="panel-footer">
-                        @unless (!Auth::check())
+                        @unless (!Auth::check() || $currentUser->isStudent)
                             <a href={{url("publications/add")}} class="btn btn-primary" >
                             <i class="fa fa-btn fa-plus"></i>Add Publication
                             </a>

@@ -11,6 +11,10 @@ use DB;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
+/**
+ * Class PublicationsController
+ * @package App\Http\Controllers
+ */
 class PublicationsController extends Controller
 {
     /**
@@ -23,7 +27,7 @@ class PublicationsController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the table of all publications.
      *
      * @return \Illuminate\Http\Response
      */
@@ -34,18 +38,31 @@ class PublicationsController extends Controller
         return view('publications', ['publications' => $publications, 'currentUser' => $user]);
     }
 
+    /**
+     * Show a table of all old Publications
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function oldDisplay(){
         $publications = Publication::where('old', true)->get();
         $user = Auth::user();
         return view('publications', ['publications' => $publications, 'currentUser' => $user]);
     }
 
+    /**
+     * Show the add publication form
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function addIndex(){
         if(!Auth::check())
             return Redirect::to('publications');
         return view('publicationsAddForm');
     }
 
+    /**
+     * Manage the publication form request
+     * @param Requests\PublicationCreationRequest $request
+     * @return mixed
+     */
     public function add(Requests\PublicationCreationRequest $request){
         if(!Auth::check())
             return Redirect::to('publications');
@@ -106,6 +123,11 @@ class PublicationsController extends Controller
             ->with('message', 'The publication has been successfully created!');
     }
 
+    /**
+     * Show the details of a publication
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function details($id){
         if(!Publication::where('id', $id)->exists()) {
             return Redirect::to('publications');
@@ -115,7 +137,11 @@ class PublicationsController extends Controller
         return view('publicationsDetails', ['publication' => $publication, 'currentUser' => $currentUser]);
     }
 
-
+    /**
+     * Declare a publication as old
+     * @param $id
+     * @return mixed
+     */
     public function setOld($id){
         if(!Publication::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/publications');
@@ -129,6 +155,11 @@ class PublicationsController extends Controller
         return Redirect::to('/publications/'.$project->id);
     }
 
+    /**
+     * Declare a publication as not old
+     * @param $id
+     * @return mixed
+     */
     public function unOld($id){
         if(!Publication::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/publications');
@@ -142,7 +173,11 @@ class PublicationsController extends Controller
         return Redirect::to('/publications/'.$project->id);
     }
 
-
+    /**
+     * Show the edit form
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editIndex($id){
         if(!Publication::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('publications');
@@ -153,6 +188,12 @@ class PublicationsController extends Controller
         }
     }
 
+    /**
+     * Manage the edit form request
+     * @param $id
+     * @param Requests\PublicationEditionRequest $request
+     * @return mixed
+     */
     public function edit($id,Requests\PublicationEditionRequest  $request){
         if(!Publication::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
             return Redirect::to('/');
@@ -212,5 +253,4 @@ class PublicationsController extends Controller
         return Redirect::to('publications/edit/'.$id)
             ->with('message', 'The publication has been successfully edited!');
     }
-
 }

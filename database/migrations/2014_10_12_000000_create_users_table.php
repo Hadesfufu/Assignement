@@ -20,7 +20,6 @@ class CreateUsersTable extends Migration
             $table->boolean('old')->default(false);
             $table->boolean('isStudent')->default(false);
             $table->boolean('administrator')->default(false);
-            $table->integer('group_id');
             $table->integer('supervisor_id');
             $table->string('photo')->default("img/default.png");
             $table->rememberToken();
