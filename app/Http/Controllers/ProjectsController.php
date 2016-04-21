@@ -50,6 +50,8 @@ class ProjectsController extends Controller
      */
     public function addIndex()
     {
+        if (!Auth::check())
+            return Redirect::to('projects');
         return view('projectsAddForm');
     }
 
@@ -59,7 +61,8 @@ class ProjectsController extends Controller
      * @return mixed
      */
     public function add(Requests\ProjectCreationRequest $request){
-
+        if (!Auth::check())
+            return Redirect::to('projects');
         $user = User::where('id',Auth::user()->id)->get()[0];
         $project = new Project;
         $project->name = $request->name;
@@ -95,7 +98,7 @@ class ProjectsController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function editIndex($id){
-        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+        if (!Project::where('id', $id)->exists() || !Auth::check()) {
             return Redirect::to('projects');
         }
         elseif(Auth::user()->administrator || Project::where('id', $id)->get()[0]->creatorId == Auth::user()->id) {
@@ -113,7 +116,7 @@ class ProjectsController extends Controller
      * @return mixed
      */
     public function edit($id, Requests\ProjectCreationRequest $request){
-        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+        if (!Project::where('id', $id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
         $project = Project::where('id', $id)->get()[0];
@@ -162,7 +165,7 @@ class ProjectsController extends Controller
         $members = DB::table('users')->join('projects_members', 'users.id', '=', 'projects_members.UserId')->select('users.*')->where('projects_members.ProjectId', $project->id)->get();
         $isIntheProject = NULL;
         if(Auth::check()) {
-            $currentUser = User::where('id',Auth::user()->id);
+            $currentUser = Auth::user();
             $isIntheProject = false;
             foreach ($members as $member) {
                 if ($currentUser->id == $member->id)
@@ -192,7 +195,7 @@ class ProjectsController extends Controller
      * @return mixed
      */
     public function setOld($id){
-        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+        if (!Project::where('id', $id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
         $user = User::where('id',Auth::user()->id)->get()[0];
@@ -210,7 +213,7 @@ class ProjectsController extends Controller
      * @return mixed
      */
     public function unOld($id){
-        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+        if (!Project::where('id', $id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
         $user = User::where('id',Auth::user()->id)->get()[0];
@@ -228,7 +231,7 @@ class ProjectsController extends Controller
      * @return mixed
      */
     public function addMember($id){
-        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+        if (!Project::where('id', $id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
         $project = Project::where('id',$id)->get()[0];
@@ -246,7 +249,7 @@ class ProjectsController extends Controller
      * @return mixed
      */
     public function removeMember($id){
-        if(!Project::where('id', $id)->exists() || !User::where('id',Auth::user()->id)->exists()) {
+        if (!Project::where('id', $id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
         $project = Project::where('id',$id)->get()[0];

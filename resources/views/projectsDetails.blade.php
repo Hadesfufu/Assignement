@@ -49,7 +49,7 @@
                                 @endforeach
                             </table>
                         @endif
-                    @if(!empty($currentUser))
+                        @if(isset($currentUser))
                         @if($user->id == $currentUser->id || $currentUser->administrator)
                             <a href={{url("projects/edit/".$project->id)}} class="btn btn-primary">
                                 <i class="fa fa-btn fa-gear"></i>Edit

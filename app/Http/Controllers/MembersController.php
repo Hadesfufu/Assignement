@@ -51,15 +51,15 @@ class MembersController extends Controller
         }
         $member = User::where('id', $id)->get()[0];
         $projects = Project::where('creatorId', $id)->get();
-        $user = User::find(Auth::user()->id)->get();
+        $user = NULL;
+        if (Auth::check())
+            $user = Auth::user();
         $projectParticipations = DB::table('projects')->join('projects_members', 'projects.id', '=', 'projects_members.ProjectId')->select('projects.*')->where('projects_members.UserId', $id)->get();
         $supervisor = User::where('id', $member->supervisor_id)->get();
         $students = User::where('supervisor_id', $id)->get();
         if ($member->isStudent)
             $supervisor = $supervisor[0];
 
-        if(!empty($user))
-            $user = $user[0];
         return view('membersDetails', ['member' => $member, 'projects' => $projects, 'currentUser' => $user, 'projectParticipations' => $projectParticipations, 'supervisor' => $supervisor, 'students' => $students]);
     }
 
@@ -81,10 +81,10 @@ class MembersController extends Controller
      * @return mixed
      */
     public function setAdmin($id){
-        if(!User::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if (!User::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
-        $user = User::find(Auth::user()->id)->get()[0];
+        $user = Auth::user();
         if($user->administrator){
             $member = User::where('id', $id)->get()[0];
             $member->administrator = true;
@@ -99,10 +99,10 @@ class MembersController extends Controller
      * @return mixed
      */
     public function setOld($id){
-        if(!User::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if (!User::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
-        $user = User::find(Auth::user()->id)->get()[0];
+        $user = Auth::user();
         if($user->administrator){
             $member = User::where('id', $id)->get()[0];
             $member->old = true;
@@ -117,10 +117,10 @@ class MembersController extends Controller
      * @return mixed
      */
     public function unOld($id){
-        if(!User::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists()) {
+        if (!User::where('id', $id)->exists() || !User::find(Auth::user()->id)->exists() || !Auth::check()) {
             return Redirect::to('/');
         }
-        $user = User::find(Auth::user()->id)->get()[0];
+        $user = Auth::user();
         if($user->administrator){
             $member = User::where('id', $id)->get()[0];
             $member->old = false;
